@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Velvet Table</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-light: #fffaf0;
+      --text-light: #333;
+      --bg-dark: #2d2d2d;
+      --text-dark: #f9f9f9;
+      --primary-color: #d63447;
+      --secondary-color: #fceee9;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .dark-mode {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .toggle-btn {
+      background-color: white;
+      color: var(--primary-color);
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .controls {
+      text-align: center;
+      margin: 2rem;
+    }
+
+    .controls input {
+      padding: 0.5rem;
+      width: 60%;
+      max-width: 400px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .controls select {
+      padding: 0.5rem;
+      margin-left: 1rem;
+      border-radius: 5px;
+    }
+
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    .card {
+      background-color: var(--secondary-color);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-bottom: 2px solid var(--primary-color);
+    }
+
+    .card-content {
+      padding: 1rem;
+    }
+
+    .card h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.4rem;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .price {
+      margin-top: 0.8rem;
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: var(--primary-color);
+    }
+
+    .fav-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .fav-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .dark-mode .card {
+      background-color: #3c3c3c;
+    }
+
+    .dark-mode .toggle-btn {
+      background-color: #333;
+      color: white;
+    }
+
+    footer {
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 3rem;
+    }
+
+    footer a {
+      color: #ffd;
+      margin: 0 0.5rem;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <div style="background-color: whitesmoke;">
+      <img src="https://www.velvettable.com/cdn/shop/files/TheVelvetTableBROWNMainLogoPNGtransparent_600x.png?v=1614332565" alt="The Velvet Table Logo">
+      </div>
+      <h1>The Velvet Table</h1>
+    </div>
+    <button class="toggle-btn" onclick="toggleTheme()">Change mode</button>
+  </header>
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Search dishes..." onkeyup="filterMenu()" />
+    <select id="categoryFilter" onchange="filterMenu()">
+      <option value="all">All Categories</option>
+      <option value="main">Main Course</option>
+      <option value="dessert">Dessert</option>
+      <option value="snack">Snacks</option>
+      <option value="drink">Drinks</option>
+    </select>
+  </div>
+
+  <section class="menu" id="menuSection">
+    <!-- Main Course -->
+    <div class="card" data-category="main">
+      <button class="fav-btn">❤</button>
+      <img src="https://static.toiimg.com/photo/56868564.cms" alt="Margherita Pizza">
+      <div class="card-content">
+        <h3>Margherita Pizza</h3>
+        <p>Fresh mozzarella, tomatoes, and basil on hand-tossed crust.</p>
+        <p class="price">₹250</p>
+      </div>
+    </div>
+
+    <div class="card" data-category="main">
+      <button class="fav-btn">❤</button>
+      <img src="https://www.ruchiskitchen.com/wp-content/uploads/2020/12/Paneer-butter-masala-recipe-3-500x500.jpg" alt="Paneer Butter Masala">
+      <div class="card-content">
+        <h3>Paneer Butter Masala</h3>
+        <p>Soft paneer cubes in rich creamy tomato gravy.</p>
+        <p class="price">₹240</p>
+      </div>
+    </div>
+
+    <div class="card" data-category="main">
+      <button class="fav-btn">❤</button>
+      <img src="https://www.livofy.com/health/wp-content/uploads/2023/03/fq5cs53_biryani-doubletree-by-hilton_625x300_12_April_22-1024x576.jpg" alt="Veg Biryani">
+      <div class="card-content">
+        <h3>Veg Biryani</h3>
+        <p>Aromatic basmati rice cooked with vegetables & Indian spices.</p>
+        <p class="price">₹200</p>
+      </div>
+    </div>
+
+    <div class="card" data-category="main">
+      <button class="fav-btn">❤</button>
+      <img src="https://www.cookwithmanali.com/wp-content/uploads/2021/07/Tandoori-Roti-500x500.jpg" alt="Tandoori Roti">
+      <div class="card-content">
+        <h3>Tandoori Roti</h3>
+        <p>Traditional Indian flatbread cooked in a clay tandoor oven.</p>
+        <p class="price">₹40</p>
+      </div>
+    </div>
+
+    <!-- New Main Course Items -->
+<div class="card" data-category="main">
+  <button class="fav-btn">❤</button>
+  <img src="https://indiaforbeginners.com/wp-content/uploads/2020/04/India-for-Beginners-custom-tours-8.jpg" alt="Dosa">
+  <div class="card-content">
+    <h3>Dosa</h3>
+    <p>South Indian crispy rice crepe served with chutney and sambar.</p>
+    <p class="price">₹100</p>
+  </div>
+</div>
+
+<div class="card" data-category="main">
+  <button class="fav-btn">❤</button>
+  <img src="https://spicecravings.com/wp-content/uploads/2020/10/Paneer-Tikka-Featured-1.jpg" alt="Paneer Tikka">
+  <div class="card-content">
+    <h3>Paneer Tikka</h3>
+    <p>Grilled paneer cubes marinated in spicy yogurt blend.</p>
+    <p class="price">₹180</p>
+  </div>
+</div>
+
+    <!-- Desserts -->
+    <div class="card" data-category="dessert">
+      <button class="fav-btn">❤</button>
+      <img src="https://almondhouse.com/cdn/shop/files/1_IMG_9491_1e1968b7-b144-49ba-a4ed-2659e95a3bcb.jpg?v=1703680462" alt="Gulab Jamun">
+      <div class="card-content">
+        <h3>Gulab Jamun</h3>
+        <p>Golden balls soaked in saffron-infused sugar syrup.</p>
+        <p class="price">₹90</p>
+      </div>
+    </div>
+
+    <div class="card" data-category="dessert">
+      <button class="fav-btn">❤</button>
+      <img src="https://agrasweetsbanjara.com/cdn/shop/files/Motichur-Laddu-agrasweets-banjara.jpg?v=1731671743" alt="Motichoor Ladoo">
+      <div class="card-content">
+        <h3>Motichoor Ladoo</h3>
+        <p>Traditional Indian sweet made with golden boondi pearls.</p>
+        <p class="price">₹85</p>
+      </div>
+    </div>
+
+    <div class="card" data-category="dessert">
+      <button class="fav-btn">❤</button>
+      <img src="https://recipesofholly.com/wp-content/uploads/2020/01/The-Best-Chocolate-Cakee-1-e1727382486288.jpg" alt="Chocolate Cake">
+      <div class="card-content">
+        <h3>Chocolate Pastry</h3>
+        <p>Rich and moist chocolate cake with a gooey center.</p>
+        <p class="price">₹120</p>
+      </div>
+    </div>
+
+
+    <!-- Snacks -->
+    <div class="card" data-category="snack">
+      <button class="fav-btn">❤</button>
+      <img src="https://onestophalal.com/cdn/shop/articles/vegetable_samosa-1697399047300_1200x.jpg?v=1697399081" alt="Samosa">
+      <div class="card-content">
+        <h3>Samosa</h3>
+        <p>Crispy pastry filled with spicy potatoes and peas.</p>
+        <p class="price">₹25</p>
+      </div>
+    </div>
+
+    <div class="card" data-category="snack">
+      <button class="fav-btn">❤</button>
+      <img src="https://static.vecteezy.com/system/resources/previews/016/282/565/large_2x/cheese-pav-bhaji-recipe-is-a-street-food-bhaji-pav-recipe-with-addition-of-cheese-free-photo.jpg" alt="Pav Bhaji">
+      <div class="card-content">
+        <h3>Pav Bhaji</h3>
+        <p>Spicy mashed veggies served with buttered bread rolls.</p>
+        <p class="price">₹80</p>
+      </div>
+    </div>
+
+    <div class="card" data-category="snack">
+      <button class="fav-btn">❤</button>
+      <img src="https://www.cuisinart.com/dw/image/v2/ABAF_PRD/on/demandware.static/-/Sites-us-cuisinart-sfra-Library/default/dw3a257599/images/recipe-Images/french-fries-airfryer-recipe.jpg?sw=1200&sh=1200&sm=fit" alt="French Fries">
+      <div class="card-content">
+        <h3>French Fries</h3>
+        <p>Crispy golden potato fries served with tangy ketchup.</p>
+        <p class="price">₹70</p>
+      </div>
+    </div>
+
+    <!-- Drinks -->
+    <div class="card" data-category="drink">
+      <button class="fav-btn">❤</button>
+      <img src="https://m.media-amazon.com/images/I/71++GYN8o5L.jpg" alt="Masala Chai">
+      <div class="card-content">
+        <h3>Masala Chai</h3>
+        <p>Spiced Indian tea brewed with milk and herbs.</p>
+        <p class="price">₹30</p>
+      </div>
+    </div>
+
+    <div class="card" data-category="drink">
+      <button class="fav-btn">❤</button>
+      <img src="https://deliciousmadeeasy.com/wp-content/uploads/2018/04/chocoholic-cold-brew-coffee-1-of-1-7-735x1056.jpg" alt="Cold Coffee">
+      <div class="card-content">
+        <h3>Cold Coffee</h3>
+        <p>Chilled creamy coffee topped with foam, ice and ice cream.</p>
+        <p class="price">₹90</p>
+      </div>
+    </div>
+
+    <div class="card" data-category="drink">
+      <button class="fav-btn">❤</button>
+      <img src="https://www.midwestliving.com/thmb/2n9egOlUYE0dnPxJoHYY7disquI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/KeyIngredient_MangoLassi_BP_1019_preview-0bdf9f28d35043748efaa9fd1c7b806c.jpg" alt="Mango Lassi">
+      <div class="card-content">
+        <h3>Mango Lassi</h3>
+        <p>Sweet mango yogurt drink, cool and refreshing.</p>
+        <p class="price">₹60</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 The Velvet Table | Made with ❤️ by Vanshika Gupta</p>
+    <p>
+      <a href="#">Instagram</a> |
+      <a href="#">Facebook</a> |
+      <a href="#">Contact</a>
+    </p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    function filterMenu() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const category = document.getElementById('categoryFilter').value;
+      const cards = document.querySelectorAll('.card');
+
+      cards.forEach(card => {
+        const title = card.querySelector('h3').innerText.toLowerCase();
+        const cardCategory = card.getAttribute('data-category');
+        const matchSearch = title.includes(search);
+        const matchCategory = category === 'all' || category === cardCategory;
+        card.style.display = matchSearch && matchCategory ? 'block' : 'none';
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll('.fav-btn').forEach(btn => {
+        btn.addEventListener('click', () => btn.classList.toggle('active'));
+      });
+    });
+  </script>
+</body>
+</html>
